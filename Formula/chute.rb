@@ -10,8 +10,13 @@ class Chute < Formula
   sha256 "e7c3ea3aec0357b8864c0389a14c99fa07126495a789b0179e1dd180fb280208"
   license "MIT"
 
+  # macOS 13 is the floor declared in Package.swift. Homebrew wants the version constraint inside
+  # an on_macos block; the flat `depends_on macos:` form is deprecated and prints a warning during
+  # install — the first thing a new user would see.
   depends_on :macos
-  depends_on macos: :ventura # macOS 13, the floor declared in Package.swift
+  on_macos do
+    depends_on macos: :ventura
+  end
 
   def install
     system "swift", "build", "-c", "release", "--product", "chute", "--disable-sandbox"
